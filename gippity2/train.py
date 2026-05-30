@@ -1,12 +1,14 @@
 import torch
+from torch.utils.tensorboard import SummaryWriter
 
 
 class Trainer:
-    def __init__(self, model, data_loader, learning_rate, device):
+    def __init__(self, model, data_loader, learning_rate, device, log_dir="runs"):
         self.model = model
         self.data_loader = data_loader
         self.device = device
         self.optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
+        self.writer = SummaryWriter(log_dir)
 
     @torch.no_grad()
     def estimate_loss(self, eval_iters):
@@ -40,6 +42,8 @@ class Trainer:
                 print(
                     f"iter {iteration}: train loss {losses['train']:.4f}, val loss {losses['val']:.4f}"
                 )
+                self.writer.add_scalar("Loss/train", losses["train"], iteration)
+                self.writer.add_scalar("Loss/val", losses["val"], iteration)
 
             x, y = self.data_loader.get_batch("train")
             logits, loss = self.model(x, y)
@@ -48,6 +52,9 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
+            self.writer.add_scalar("Loss/step", loss.item(), iteration)
+
+        self.writer.close()
         print("Training complete!")
 
     def generate(self, num_tokens):
