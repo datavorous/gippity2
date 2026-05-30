@@ -1,0 +1,24 @@
+{
+  "data": {
+    "batch_size": 64,
+    "block_size": 128
+  },
+  "training": {
+    "max_iters": 5000,
+    "eval_interval": 500,
+    "learning_rate": 0.0003,
+    "eval_iters": 200
+  },
+  "model": {
+    "embed_dim": 256,
+    "num_heads": 4,
+    "num_layers": 4,
+    "dropout": 0.2
+  },
+  "generation": {
+    "num_tokens": 500
+  },
+  "setup": {
+    "seed": 42
+  }
+}
