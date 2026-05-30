@@ -1,9 +1,11 @@
 import torch
 from gippity2 import GPT, DataLoader, Trainer, Config
 
-from google.colab import output
-
-output.enable_custom_widget_manager()
+try:
+    from google.colab import output
+    output.enable_custom_widget_manager()
+except:
+    pass
 
 config = Config("config.json")
 
@@ -30,8 +32,11 @@ trainer = Trainer(
 trainer.train(config.max_iters, config.eval_interval, config.eval_iters)
 trainer.save("model_weights.pth")
 
-# from tensorboard import notebook
-# notebook.display(port=6006)
+try:
+    from tensorboard import notebook
+    notebook.display(port=6006)
+except:
+    print("TensorBoard not available")
 
 print("Generating text:")
 generated_text = trainer.generate(config.num_generate_tokens)
