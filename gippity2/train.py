@@ -55,3 +55,11 @@ class Trainer:
         context = torch.zeros((1, 1), dtype=torch.long, device=self.device)
         output = self.model.generate(context, num_tokens)
         return self.data_loader.decode(output[0].tolist())
+
+    def save(self, path):
+        torch.save(self.model.state_dict(), path)
+        print(f"Model saved to {path}")
+
+    def load(self, path):
+        self.model.load_state_dict(torch.load(path, map_location=self.device))
+        print(f"Model loaded from {path}")

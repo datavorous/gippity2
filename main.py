@@ -22,6 +22,7 @@ model = GPT(
 
 trainer = Trainer(model, data_loader, config.learning_rate, config.device)
 trainer.train(config.max_iters, config.eval_interval, config.eval_iters)
+trainer.save("model_weights.pth")
 
 print("Generating text:")
 generated_text = trainer.generate(config.num_generate_tokens)
